@@ -1,0 +1,72 @@
+2: wait
+1: entered critical section
+1: works inside critical section
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+1: left critical section
+1: works outside critical section
+2: entered critical section
+2: works inside critical section
+2: left critical section
+2: works outside critical section
+2: wait
+1: entered critical section
+1: works inside critical section
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+1: left critical section
+1: works outside critical section
+2: entered critical section
+2: works inside critical section
+2: left critical section
+2: works outside critical section
+2: wait
+1: entered critical section
+1: works inside critical section
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+1: left critical section
+1: works outside critical section
+2: entered critical section
+2: works inside critical section
+2: left critical section
+2: works outside critical section
+2: wait
+1: entered critical section
+1: works inside critical section
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+1: left critical section
+1: works outside critical section
+2: entered critical section
+2: works inside critical section
+2: left critical section
+2: works outside critical section
+2: wait
+#Error: 1: thread is stopping         > Process 1 gets stopped outside the critical section
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait
+2: wait                               > Process 2 now is no longer able to enter the CS again
+...
