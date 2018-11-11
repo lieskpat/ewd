@@ -29,7 +29,9 @@ public class EWD123 {
 
         //EWD123a experiment1 = new EWD123a(); 
         //EWD123b experiment2 = new EWD123b();
-        EWD123c experiment3 = new EWD123c();
+        //EWD123c experiment3 = new EWD123c();
+        //EWD123d experiment3 = new EWD123d();
+        EWDDECKER experiment4 = new EWDDECKER();
         //Peterson experiment2 = new Peterson(); 
     }
 

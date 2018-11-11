@@ -35,25 +35,24 @@ public class EWDDECKER {
 		public void run() {
 			while (true) { // endless loop!
 
-				c1 = 0;
-				
-				while (c2 == 0) {
-					
-					while (turn == 1) {
-						Controller.message("wait");
-						Controller.sleep(1);
+				c1 = 0; // A1
+
+				while (c2 == 0) { // L1
+
+					if (turn == 1) {
+						continue;
 					}
-					
+
+					c1 = 1;
+
 					while (turn == 2) {
 						Controller.message("wait");
 						Controller.sleep(1);
 					}
+					c1 = 0;
 				}
-				//https://www.geeksforgeeks.org/operating-system-dekkers-algorithm/
-				while (c2 == 0) { // loop as long as the other process is in the critical section
-					Controller.message("wait");
-					Controller.sleep(1);
-				}
+
+				// https://www.geeksforgeeks.org/operating-system-dekkers-algorithm/
 
 				Controller.sleep(1); // simulate some set-up time, improves chances for a clash!
 
@@ -63,14 +62,15 @@ public class EWDDECKER {
 
 				Controller.leaveCS();
 				c1 = 1; // set the guard variable for the other process
+				turn = 2;
 				Controller.workOutsideCS(10); // simulate work in the non-critical section
 
 				/* exit the loop/thread with a certain probability */
-				if (Controller.randomBoolean(0.1)) { // with a random chance to ...
-					break; // ... exit the loop and stop the thread
-				}
+				//if (Controller.randomBoolean(0.1)) { // with a random chance to ...
+				//	break; // ... exit the loop and stop the thread
+				//}
 			}
-			Controller.errorMessage("thread is stopping");
+			//Controller.errorMessage("thread is stopping");
 		}
 	}
 
@@ -96,27 +96,38 @@ public class EWDDECKER {
 		public void run() {
 			while (true) { // endless loop!
 
-					c2 = 0;
+				c2 = 0;
 
-					while (c1 == 0) { // loop as long as the other process is in the critical section
+				while (c1 == 0) {
+
+					if (turn == 2) {
+						continue;
+					}
+
+					c2 = 1;
+
+					while (turn == 1) { // loop as long as the other process is in the critical section
 						Controller.message("wait");
 						Controller.sleep(1);
 					}
 
-					Controller.sleep(1); // simulate some set-up time, improves chances for a clash!
+					c2 = 0;
+				}
 
-					Controller.enterCS();
+				Controller.sleep(1); // simulate some set-up time, improves chances for a clash!
 
-					Controller.workInsideCS(3); // simulate work in the critical section
+				Controller.enterCS();
 
-					Controller.leaveCS();
-					c2 = 1; // set the guard variable for the other process
-					Controller.workOutsideCS(5); // simulate work in the non-critical section
-				
+				Controller.workInsideCS(3); // simulate work in the critical section
+
+				Controller.leaveCS();
+				c2 = 1; // set the guard variable for the other process
+				turn = 1;
+				Controller.workOutsideCS(5); // simulate work in the non-critical section
+
 			}
 			// Controller.errorMessage("thread is stopping");
 		}
 	}
-
 
 }

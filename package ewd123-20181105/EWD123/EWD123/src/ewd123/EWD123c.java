@@ -48,15 +48,17 @@ public class EWD123c {
 				Controller.workInsideCS(5); // simulate work in the critical section
 
 				Controller.leaveCS();
+				
 				c1 = 1; // set the guard variable for the other process
+				
 				Controller.workOutsideCS(10); // simulate work in the non-critical section
 
 				/* exit the loop/thread with a certain probability */
-				if (Controller.randomBoolean(0.1)) { // with a random chance to ...
-					break; // ... exit the loop and stop the thread
-				}
+				//if (Controller.randomBoolean(0.1)) { // with a random chance to ...
+				//	break; // ... exit the loop and stop the thread
+				//}
 			}
-			Controller.errorMessage("thread is stopping");
+			//Controller.errorMessage("thread is stopping");
 		}
 	}
 
