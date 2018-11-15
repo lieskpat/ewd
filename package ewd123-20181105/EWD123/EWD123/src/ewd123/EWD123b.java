@@ -2,6 +2,7 @@ package ewd123;
 
 public class EWD123b {
 
+	// c = 0 (inside cs) / 1 (outside cs)
 	int c1 = 1;
 	int c2 = 1;
 
@@ -35,29 +36,30 @@ public class EWD123b {
 		public void run() {
 			while (true) { // endless loop!
 
+				// wenn c2 == 1, d.h. c2 ist outside cs
+				// bevor c1 = 0, d.h. c1 ist inside cs, gesetzt wird
+				// startet Prozess 2 (c2)
+				// für Prozess 2 ist immer noch c1 == 1, d.h. outside cs
+				// Prozess 2 betritt die cs
+				// Prozess 1 betritt auch die cs
 				while (c2 == 0) { // loop as long as the other process is in the critical section
 					Controller.message("wait");
 					Controller.sleep(1);
 				}
 
 				Controller.sleep(1); // simulate some set-up time, improves chances for a clash!
-
+				// c1 inside cs
 				c1 = 0;
 
 				Controller.enterCS();
 
 				Controller.workInsideCS(5); // simulate work in the critical section
-				
-				Controller.leaveCS();
-				c1 = 1; // set the guard variable for the other process
-				Controller.workOutsideCS(10); // simulate work in the non-critical section
 
-				/* exit the loop/thread with a certain probability */
-				if (Controller.randomBoolean(0.1)) { // with a random chance to ...
-					break; // ... exit the loop and stop the thread
-				}
+				Controller.leaveCS();
+				// c1 outside cs
+				c1 = 1;
+				Controller.workOutsideCS(10); // simulate work in the non-critical section
 			}
-			Controller.errorMessage("thread is stopping");
 		}
 	}
 
@@ -89,16 +91,18 @@ public class EWD123b {
 				}
 
 				Controller.sleep(1); // simulate some set-up time, improves chances for a clash!
+				// c2 inside cs
 				c2 = 0;
+
 				Controller.enterCS();
 
 				Controller.workInsideCS(3); // simulate work in the critical section
-				
+
 				Controller.leaveCS();
-				c2 = 1; // set the guard variable for the other process
+				// c2 outside cs
+				c2 = 1;
 				Controller.workOutsideCS(5); // simulate work in the non-critical section
 			}
-			// Controller.errorMessage("thread is stopping");
 		}
 	}
 }

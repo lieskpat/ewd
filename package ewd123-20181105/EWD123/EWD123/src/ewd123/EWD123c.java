@@ -1,6 +1,8 @@
 package ewd123;
 
 public class EWD123c {
+
+	// c = 0 (inside cs) / 1 (outside cs)
 	int c1 = 1;
 	int c2 = 1;
 
@@ -34,8 +36,19 @@ public class EWD123c {
 		public void run() {
 			while (true) { // endless loop!
 
+				// c1 inside cs
 				c1 = 0;
+				
+				//wenn c1 = 0, d.h. inside cs
+				//der Prozess wechselt, also bevor die Schleife (c2 == 0)
+				//abgefragt wird
+				//wird im Prozess 2 c2 = 0 (inside cs) gesetzt
+				//jetzt wird die Schleife abgearbeitet
+				//mit dem Resultat c2 == 0
+				//im Prozess 2 ist c1 == 0
+				//beide Prozesse warten in Endlosschleife
 
+				// while c2 inside cs
 				while (c2 == 0) { // loop as long as the other process is in the critical section
 					Controller.message("wait");
 					Controller.sleep(1);
@@ -48,17 +61,12 @@ public class EWD123c {
 				Controller.workInsideCS(5); // simulate work in the critical section
 
 				Controller.leaveCS();
-				
-				c1 = 1; // set the guard variable for the other process
-				
-				Controller.workOutsideCS(10); // simulate work in the non-critical section
 
-				/* exit the loop/thread with a certain probability */
-				//if (Controller.randomBoolean(0.1)) { // with a random chance to ...
-				//	break; // ... exit the loop and stop the thread
-				//}
+				// c1 outside cs
+				c1 = 1;
+
+				Controller.workOutsideCS(10); // simulate work in the non-critical section
 			}
-			//Controller.errorMessage("thread is stopping");
 		}
 	}
 
@@ -84,25 +92,28 @@ public class EWD123c {
 		public void run() {
 			while (true) { // endless loop!
 
-					c2 = 0;
+				// c2 inside cs
+				c2 = 0;
 
-					while (c1 == 0) { // loop as long as the other process is in the critical section
-						Controller.message("wait");
-						Controller.sleep(1);
-					}
+				// while c1 inside cs
+				while (c1 == 0) { // loop as long as the other process is in the critical section
+					Controller.message("wait");
+					Controller.sleep(1);
+				}
 
-					Controller.sleep(1); // simulate some set-up time, improves chances for a clash!
+				Controller.sleep(1); // simulate some set-up time, improves chances for a clash!
 
-					Controller.enterCS();
+				Controller.enterCS();
 
-					Controller.workInsideCS(3); // simulate work in the critical section
+				Controller.workInsideCS(3); // simulate work in the critical section
 
-					Controller.leaveCS();
-					c2 = 1; // set the guard variable for the other process
-					Controller.workOutsideCS(5); // simulate work in the non-critical section
+				Controller.leaveCS();
 				
+				// c2 outside cs
+				c2 = 1;
+				Controller.workOutsideCS(5); // simulate work in the non-critical section
+
 			}
-			// Controller.errorMessage("thread is stopping");
 		}
 	}
 

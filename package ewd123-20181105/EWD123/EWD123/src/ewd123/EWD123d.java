@@ -35,10 +35,13 @@ public class EWD123d {
         public void run() { 
             while (true) {                              // endless loop! 
                 
+            	// c1 inside cs
             	c1 = 0;									// L1
             	
+            	// if c2 inside cs 
                 if (c2 == 0) {                     // loop as long as the other process is in the critical section
-                    c1 = 1;
+                    // c1 outside cs
+                	c1 = 1;
                     Controller.message("wait");
 					Controller.sleep(1);
                     continue;
@@ -52,16 +55,11 @@ public class EWD123d {
 
                 Controller.leaveCS();
                 
+                // c1 outside cs
                 c1 = 1;                               // set the guard variable for the other process
 
                 Controller.workOutsideCS(10);           // simulate work in the non-critical section
-                
-                /* exit the loop/thread with a certain probability */
-                //if (Controller.randomBoolean(0.1)) {    // with a random chance to ...
-                //    break;                              // ... exit the loop and stop the thread
-                //}
-            } 
-            //Controller.errorMessage("thread is stopping");
+            }
         }         
     }
 
@@ -87,10 +85,12 @@ public class EWD123d {
         public void run() { 
             while (true) {                              // endless loop! 
                 
+            	//c2 inside cs
             	c2 = 0;
             	
                 if (c1 == 0) {                     // loop as long as the other process is in the critical section
-                    c2 = 1;
+                    //c2 outside cs
+                	c2 = 1;
                     Controller.message("wait");
 					Controller.sleep(1);
                     continue;
@@ -104,11 +104,11 @@ public class EWD123d {
 
                 Controller.leaveCS();
                 
+                // c2 outside cs
                 c2 = 1;                               // set the guard variable for the other process
 
                 Controller.workOutsideCS(5);            // simulate work in the non-critical section
             } 
-            // Controller.errorMessage("thread is stopping");
         }         
     }
 
